@@ -1,66 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Stage Finder
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plateforme web de mise en relation entre étudiants et entreprises pour la recherche
+de stages et d'alternances. Application Laravel 11 avec gestion fine des rôles et
+permissions, recherche d'offres géolocalisée, candidatures, wishlists et
+évaluations d'entreprises. Installable comme application mobile (PWA).
 
-## About Laravel
+Projet de groupe : module développement web.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fonctionnalités
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Côté étudiant**
+- Recherche et filtrage des offres par secteur, département, ville et compétences.
+- Consultation des fiches entreprises et de leurs offres en cours.
+- Candidature en ligne avec suivi de l'état de chaque dossier.
+- Wishlist d'offres, ajout et retrait en un clic.
+- Évaluation des entreprises après un stage.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Côté pilote**
+- Création, édition et suppression des offres et des entreprises.
+- Gestion des comptes étudiants et des promotions (classes).
+- Consultation des candidatures et des statistiques par offre.
 
-## Learning Laravel
+**Côté administrateur**
+- Gestion complète des utilisateurs, y compris les pilotes.
+- Tableau de bord avec statistiques sur les offres, les entreprises et les étudiants.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Rôles et permissions
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Trois rôles sont définis via [spatie/laravel-permission](https://spatie.be/docs/laravel-permission) :
+`Etudiant`, `Pilote` et `Admin`. Les permissions sont granulaires
+(`create_offer`, `apply_for_offer`, `evaluate_company`, `view_offer_stats`,
+`delete_student`…) et attribuées par rôle dans `database/seeders/PermissionSeeder.php`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Stack technique
 
-## Laravel Sponsors
+| Couche | Technologie |
+|---|---|
+| Backend | PHP 8.2, Laravel 11 |
+| Frontend | Blade, Tailwind CSS 3, Vite 6 |
+| Base de données | MySQL / MariaDB (Eloquent, migrations, seeders) |
+| Permissions | spatie/laravel-permission 6 |
+| PWA | silviolleite/laravelpwa 2 |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+Prérequis : PHP 8.2+, Composer, Node.js 18+, un serveur MySQL ou MariaDB.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+git clone https://github.com/Zargan3IQ/Stage-Finder.git
+cd Stage-Finder
 
-## Contributing
+composer install
+npm install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Renseignez les accès à la base dans `.env`, puis :
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan migrate --seed
+npm run build
+php artisan serve
+```
 
-## Security Vulnerabilities
+L'application est disponible sur <http://localhost:8000>.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+En développement, lancez `npm run dev` en parallèle pour le rechargement à chaud
+des assets.
 
-## License
+## Jeu de données de démonstration
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+`php artisan migrate --seed` alimente la base avec des régions, départements,
+villes et codes postaux français, des secteurs d'activité, des compétences, des
+promotions, ainsi que des entreprises, offres, utilisateurs, candidatures,
+wishlists et évaluations fictifs. Les comptes de test et leurs mots de passe sont
+définis dans `database/seeders/UserSeeder.php`.
+
+## Modèle de données
+
+| Modèle | Rôle |
+|---|---|
+| `User` | Comptes, rattachés à une classe et à un rôle |
+| `Company` | Entreprises, liées à un ou plusieurs secteurs |
+| `Offer` | Offres de stage, liées à une entreprise, des départements et des compétences |
+| `Application` | Candidatures, avec un statut (`Status`) |
+| `Evaluation` | Notes et avis laissés sur une entreprise |
+| `Skill`, `Sector`, `Classe` | Référentiels |
+| `Region`, `Department`, `City` | Découpage géographique |
+
+Les tables pivot (`offers_skills`, `offers_departments`, `companies_sectors`,
+`users_classes`, `wishlists`) gèrent les relations plusieurs-à-plusieurs.
+
+## Structure du projet
+
+```
+├── app/
+│   ├── Http/Controllers/   # Auth, Offer, Company, Application, Evaluation, Wishlist, Dashboard, Profile, User
+│   └── Models/             # 12 modèles Eloquent
+├── database/
+│   ├── migrations/         # 23 migrations
+│   └── seeders/            # 19 seeders, dont le référentiel géographique
+├── resources/views/        # Vues Blade par domaine + pages institutionnelles
+├── routes/web.php          # ~60 routes nommées
+└── config/                 # Configuration Laravel, permissions et PWA
+```
+
+## Auteurs
+
+Projet réalisé en groupe. Développement original : [benjaminbourlet/Projet-WEB](https://github.com/benjaminbourlet/Projet-WEB).
